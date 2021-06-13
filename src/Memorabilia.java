@@ -54,6 +54,12 @@ public class Memorabilia{
 	String[][] nombrePeliculaPrestada=new String[30][1];
 	String[] nombreClientePrestamo=new String[30];
 
+	// variables globales para devolucionde peliculas
+	int idClienteDevolucion;
+	int idAlquiladaDevolucion;
+	int[][] idPeliculaDevolver;
+	int[][] idClienteDevolver;
+
 	public void menu(){
 		while(opcion!=9){
 			System.out.println("\n-----------------Menu----------------\n");
@@ -123,6 +129,16 @@ public class Memorabilia{
 		
 	}
 
+	public void devolverPeliculas(){
+		System.out.println("Devolucion de peliculas");
+		imprimirPeliculasPrestadas();
+		System.out.print("\nIngrese el Id de la pelicula que desea devolver: ");
+		idAlquiladaDevolucion=scanner.nextInt();
+		System.out.print("Ingrese el Id de cliente: ");
+		idClienteDevolucion=scanner.nextInt();
+
+	}
+
 	public void verificarDisponiblidadDeCompra(int eleccion,int idAlquilada, int idCliente, int diasAlquiler){
 		boolean peliculaExistente=false;
 		boolean clienteExistente=false;
@@ -161,7 +177,7 @@ public class Memorabilia{
 				idpeliPrestamo[contadorPrestamoPeli][0]=idAlquilada;
 				diasPrestamos[contadorPrestamoPeli]=diasAlquiler;
 				contadorPrestamoPeli++;
-				imprimirPeliculasPrestadas();
+				//imprimirPeliculasPrestadas();
 			} else {
 				System.out.println("Los datos de pelicula o cliente son incorrectos");
 			}
@@ -173,6 +189,7 @@ public class Memorabilia{
 		}
 
 	}
+
 
 	public void imprimirPeliculasPrestadas(){
 		int contador=0;

@@ -47,6 +47,12 @@ public class Memorabilia{
 	int[] idclientePrestamo=new int[30];
 	int[] idPeliculaPrestad=new int[30];
 	int[] cantidadDias=new int[30];
+	int contadorPrestamoPeli=0;
+	int[][] clientePrestamo=new int[30][1];
+	int[][] idpeliPrestamo=new int[30][1];
+	int[] diasPrestamos=new int[30];
+	String[][] nombrePeliculaPrestada=new String[30][1];
+	String[] nombreClientePrestamo=new String[30];
 
 	public void menu(){
 		while(opcion!=9){
@@ -84,6 +90,7 @@ public class Memorabilia{
 		int eleccion;
 		int idCliente;
 		int idAlquilada;
+		int diasAlquiler;
 		boolean hayPeliculasDisponibles=false;
 		imprimirPeliculasDisponibles(contador);
 		for (int i=0;i<disponible.length && !hayPeliculasDisponibles;i++) {
@@ -95,35 +102,69 @@ public class Memorabilia{
 		}
 		if (hayPeliculasDisponibles==true) {
 			System.out.println("!!!!!Unicamente se puede alquilar una pelicula por persona!!!!!");
-			System.out.print("Ingrese el Id de la pelicula que desea alquilar: ");
+			System.out.print("\nIngrese el Id de la pelicula que desea alquilar: ");
 			idAlquilada=scanner.nextInt();
 			System.out.print("Ingrese el Id de cliente: ");
 			idCliente=scanner.nextInt();
-			System.out.println("Desea alquilar la pelicula Id: "+idAlquilada+" con Id de cliente:"+idCliente);
-			System.out.print("1.Si      2.No      .Ingrese el numero de opcion: ");
-			eleccion=scanner.nextInt();
-			verificarDisponiblidadDeCompra(eleccion,idAlquilada,idCliente);
+			System.out.print("Ingrese cantidad de dias de prestamo: ");
+			diasAlquiler=scanner.nextInt();
+			if (diasAlquiler>0) {
+				System.out.println("");
+				System.out.println("¿Desea alquilar la pelicula Id: "+idAlquilada+",con Id de cliente:"+idCliente +" por "+diasAlquiler+" dias?");
+				System.out.println("1.Si      2.No    ");
+				System.out.print("Ingrese el numero de opcion: ");
+				eleccion=scanner.nextInt();
+				verificarDisponiblidadDeCompra(eleccion,idAlquilada,idCliente,diasAlquiler);	
+			} else {
+				System.out.println("Cantidad de dias incorrecto");
+			}
+			
 		}
 		
 	}
 
-	public void verificarDisponiblidadDeCompra(int eleccion,int idAlquilada, int idCliente){
+	public void verificarDisponiblidadDeCompra(int eleccion,int idAlquilada, int idCliente, int diasAlquiler){
 		boolean peliculaExistente=false;
-		boolean clienteExistente=false;;
+		boolean clienteExistente=false;
+		for (int i=0;i<disponible.length && !peliculaExistente;i++) {
+			if (disponible[i]==true && id_Año[i][0]==idAlquilada) {
+				peliculaExistente=true;
+			} else {
+				peliculaExistente=false;
+			}
+		}
+
+		for (int i=0;i<disponible.length &&!clienteExistente;i++) {
+			if (tienePeliculaPrestada[i]==false && idClienteTelefono[i][0]==idCliente) {
+				clienteExistente=true;
+			} else {
+				clienteExistente=false;
+			}
+		}
+
 		if (eleccion==1) {
-			for (int i=0;i<disponible.length && !peliculaExistente && !clienteExistente;i++ ) {
-				if (disponible[i]==true &&  id_Año[i][0]==idAlquilada) {
-					peliculaExistente=true;
-				} 
-				if (idClienteTelefono[i][0]==idCliente && tienePeliculaPrestada[i]==false) {
-					disponible[i]=false;
-					clienteExistente=true;
-					tienePeliculaPrestada[i]=true;
-					System.out.println("!!!!Pelicula alquilada!!!!");
-				}if (i==disponible.length-1) {
-					System.out.println("No se pudo alquilar, asegurese de ingresar los datos correctos");
+			if (clienteExistente==true && peliculaExistente==true && contadorPrestamoPeli<clientePrestamo.length) {
+				for (int i=0;i<disponible.length;i++ ) {
+					if (id_Año[i][0]==idAlquilada && disponible[i]==true) {
+						disponible[i]=false;
+						nombrePeliculaPrestada[contadorPrestamoPeli][0]=nombrePelicula_categoria[i][0]
+					}
 				}
-			} 
+				for (int j=0;j<disponible.length;j++) {
+					if (idClienteTelefono[j][0]==idCliente && tienePeliculaPrestada[j]==false) {
+						tienePeliculaPrestada[j]=true;
+						nombreClientePrestamo[contadorPrestamoPeli]=nombresCliente[i];
+						System.out.println("---PELICULA ALQUILADA---");
+					}
+				}
+				clientePrestamo[contadorPrestamoPeli][0]=idCliente;
+				idpeliPrestamo[contadorPrestamoPeli][0]=idAlquilada;
+				diasPrestamos[contadorPrestamoPeli]=diasAlquiler;
+				contadorPrestamoPeli++;
+				imprimirPeliculasPrestadas();
+			} else {
+				System.out.println("Los datos de pelicula o cliente son incorrectos");
+			}
 		} else if (eleccion==2) {
 			System.out.println("-----Hay mas peliculas, quiza te guste otra-----");
 			System.out.println("------------MEMORABILIA--------------------");
@@ -131,6 +172,26 @@ public class Memorabilia{
 			System.out.println("La opcion es incorrecta");
 		}
 
+	}
+
+	public void imprimirPeliculasPrestadas(){
+		int contador=0;
+		String espacio="|----------|";
+		System.out.println("Peliculas Alquiladas: ");
+		while((clientePrestamo[contador][0]!=0) && contador<clientePrestamo.length){		
+			System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------");
+			System.out.print("| Id Cliente: "+clientePrestamo[contador][0]);
+			System.out.print(espacio);
+			System.out.prin("Nombre Cliente: "+nombreClientePrestamo[contador]);
+			System.out.print(espacio);
+			System.out.print("Id pelicula: "+idpeliPrestamo[contador][0]);
+			System.out.print(espacio);
+			System.out.print("Nombre Pelicula: "+nombrePeliculaPrestada[contador][0]);
+			System.out.print(espacio);
+			System.out.print("Dias de prestamo: "+diasPrestamos[contador]+" |");
+			System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------");
+			contador++;
+		}
 	}
 
 	public void imprimirPeliculasDisponibles(int contador){
@@ -205,11 +266,14 @@ public class Memorabilia{
 			nombrePelicula=scanner.nextLine();
 			System.out.print("Id de la Pelicula: ");
 			idPelicula=scanner.nextInt();
+			scanner.nextLine();
 			System.out.print("Año de pelicula: ");
 			añoPelicula=scanner.nextInt();
+			scanner.nextLine();
 			System.out.println("Categorias: 1.Accion   2.Terror    3.Comedia    4.Drama    5.Ciencia Ficcion");
 			System.out.print("Ingrese el numero de categoria: ");
 			opcionCategoria=scanner.nextInt();
+			scanner.nextLine();
 			categorias(opcionCategoria);
 			System.out.println("Disponiblidad:    1.Disponible       2. No disponible");
 			System.out.print("Ingrese el numero de Disponibilidad: ");
@@ -312,9 +376,11 @@ public class Memorabilia{
 			scanner.nextLine();
 			nombreCliente=scanner.nextLine();
 			System.out.print("Id de cliente: ");
+			scanner.nextLine();
 			idCliente=scanner.nextInt();
 			System.out.print("Telefono del cliente: ");
 			telefono=scanner.nextInt();
+			scanner.nextLine();
 			estadoDeCliente=false;
 			for (int i=0;i<idClienteTelefono.length && !repetido ;i++ ) {
 				if (idClienteTelefono[i][0]==idCliente) {

@@ -249,20 +249,16 @@ public class Memorabilia{
 		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------");	
 		while(nombrePelicula_categoria[contador][0]!=null && contador<cantidadDias.length){	
 			if (disponible[contador]==false && cantidadDias[contador]!=0) {
-				for (int i=0;i<cantidadDias.length;i++) {
-					if (tienePeliculaPrestada[i]==true ) {
-						System.out.print("| Id Cliente: "+idClienteTelefono[i][0]);
-						System.out.print(espacio);
-						System.out.print("Nombre Cliente: "+nombresCliente[i]);
-						System.out.print(espacio);
-						System.out.print("Id pelicula: "+id_Año[contador][0]);
-						System.out.print(espacio);
-						System.out.print("Nombre Pelicula: "+nombrePelicula_categoria[contador][0]);
-						System.out.print(espacio);
-						System.out.print("Dias de prestamo: "+cantidadDias[contador]+" |");
-						System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------");
-					}
-				}
+				System.out.print("| Id Cliente: "+idClienteTelefono[contador][0]);
+				System.out.print(espacio);
+				System.out.print("Nombre Cliente: "+nombresCliente[contador]);
+				System.out.print(espacio);
+				System.out.print("Id pelicula: "+id_Año[contador][0]);
+				System.out.print(espacio);
+				System.out.print("Nombre Pelicula: "+nombrePelicula_categoria[contador][0]);
+				System.out.print(espacio);
+				System.out.print("Dias de prestamo: "+cantidadDias[contador]+" |");
+				System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------");
 			}
 			contador++;		
 		}

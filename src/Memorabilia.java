@@ -50,8 +50,6 @@ public class Memorabilia{
 	int mayorVecesPrestada=0;
 	int menorVecesPrestada=10000;
 	int[][] datosAlquiler=new int[30][2];
-	String[][] nombresDeAlquileres=new String[30][1];
-	String[] nombreClienteAlquiler=new String[30];
 	
 	public void menu(){
 		while(opcion!=9){

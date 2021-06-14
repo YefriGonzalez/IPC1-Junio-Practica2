@@ -10,6 +10,7 @@ public class Memorabilia{
 
 	// Constructor
 	public Memorabilia(){
+		inicializarUsoDePeliculas();
 		menu();
 	}
 
@@ -45,12 +46,9 @@ public class Memorabilia{
 
 	// variables globales para prestamos de peliculas
 	int[] cantidadDias=new int[30];
-	int cantidadVecesPeliculaPrestada=0;
-	int peliAccionPrestada=0;
-	int peliTerrorPrestada=0;
-	int peliComediaPrestada=0;
-	int peliDramaPrestada=0;
-	int peliCienciaPrestada=0;
+	int[] vecesPrestada=new int[30];
+	int mayorVecesPrestada=0;
+	int menorVecesPrestada=10000;
 	
 	public void menu(){
 		while(opcion!=9){
@@ -81,6 +79,12 @@ public class Memorabilia{
 			}
 		}
 		System.out.println("\n----------------------Adios-----------------");
+	}
+
+	public void inicializarUsoDePeliculas(){
+		for (int i=0;i<vecesPrestada.length;i++ ) {
+			vecesPrestada[i]=0;
+		}
 	}
 
 	public void prestamoPeliculas(){
@@ -210,6 +214,7 @@ public class Memorabilia{
 				for (int i=0;i<disponible.length;i++ ) {
 					if (id_Año[i][0]==idAlquilada && disponible[i]==true) {
 						disponible[i]=false;
+						vecesPrestada[i]++;
 					}
 				}
 				for (int j=0;j<disponible.length;j++) {
@@ -572,9 +577,10 @@ public class Memorabilia{
 			System.out.println("4.Drama            5.Ciencia Ficcion   6.Regresar");
 			opcion=scanner.nextInt();
 			if (opcion==1) {
+				System.out.println("ACCION");
 				while(cont1<cantidadDias.length && nombrePelicula_categoria[cont1][0]!=null){
 					if (nombrePelicula_categoria[cont1][1].equals("Accion")) {
-						System.out.print(cont1+".Nombre: "+nombrePelicula_categoria[cont1][0]);
+						System.out.print(".Nombre: "+nombrePelicula_categoria[cont1][0]);
 						System.out.print(espacio);
 						System.out.print("Id: "+id_Año[cont1][0]+"|");
 						System.out.println("\n-------------------------------------------------------");
@@ -582,9 +588,10 @@ public class Memorabilia{
 					cont1++;
 				}	
 			}else if (opcion==2) {
+				System.out.println("TERROR");
 				while(cont2<cantidadDias.length && nombrePelicula_categoria[cont2][0]!=null){
 					if (nombrePelicula_categoria[cont2][1].equals("Terror")) {
-						System.out.print(cont2+".Nombre: "+nombrePelicula_categoria[cont2][0]);
+						System.out.print(".Nombre: "+nombrePelicula_categoria[cont2][0]);
 						System.out.print(espacio);
 						System.out.print("Id: "+id_Año[cont2][0]+"|");
 						System.out.println("\n-------------------------------------------------------");
@@ -592,9 +599,10 @@ public class Memorabilia{
 					cont2++;
 				}
 			} else if (opcion==3) {
+				System.out.println("COMEDIA");
 				while(cont3<cantidadDias.length && nombrePelicula_categoria[cont3][0]!=null){
 					if (nombrePelicula_categoria[cont3][1].equals("Comedia")) {
-						System.out.print(cont3+".Nombre: "+nombrePelicula_categoria[cont3][0]);
+						System.out.print(".Nombre: "+nombrePelicula_categoria[cont3][0]);
 						System.out.print(espacio);
 						System.out.print("Id: "+id_Año[cont3][0]+"|");
 						System.out.println("\n-------------------------------------------------------");
@@ -602,9 +610,10 @@ public class Memorabilia{
 					cont3++;
 				}
 			} else if (opcion==4) {
+				System.out.println("DRAMA");
 				while(cont4<cantidadDias.length && nombrePelicula_categoria[cont4][0]!=null){
 					if (nombrePelicula_categoria[cont4][1].equals("Comedia")) {
-						System.out.print(cont4+".Nombre: "+nombrePelicula_categoria[cont4][0]);
+						System.out.print(".Nombre: "+nombrePelicula_categoria[cont4][0]);
 						System.out.print(espacio);
 						System.out.print("Id: "+id_Año[cont4][0]+"|");
 						System.out.println("\n-------------------------------------------------------");
@@ -612,9 +621,10 @@ public class Memorabilia{
 					cont4++;
 				}
 			} else if (opcion==5) {
+				System.out.println("CIENCIA FICCION");
 				while(cont5<cantidadDias.length && nombrePelicula_categoria[cont5][0]!=null){
 					if (nombrePelicula_categoria[cont5][1].equals("Ciencia Ficcion")) {
-						System.out.print(cont5+".Nombre: "+nombrePelicula_categoria[cont5][0]);
+						System.out.print(".Nombre: "+nombrePelicula_categoria[cont5][0]);
 						System.out.print(espacio);
 						System.out.print("Id: "+id_Año[cont5][0]+"|");
 						System.out.println("\n-------------------------------------------------------");
@@ -626,14 +636,66 @@ public class Memorabilia{
 	}
 
 	public void cantidadVecesQueSeAlquila(){
-		
+		String espacio="----------";
+		System.out.println("-------------------------------------------------------");
+		for (int i=0;i<vecesPrestada.length;i++) {
+			if (nombrePelicula_categoria[i][0]!=null) {
+				System.out.print("Id: "+id_Año[i][0]);
+				System.out.print(espacio);
+				System.out.print("Nombre: "+nombrePelicula_categoria[i][0]);
+				System.out.print(espacio);
+				System.out.print("No. Veces Prestada: "+vecesPrestada[i]);
+				System.out.println("\n-------------------------------------------------------");
+			}
+		}
 	}
 
 	public void peliculaMasPrestada(){
-
+		String espacio="----------";
+		System.out.println("Pelicula Mas prestada: ");
+		for (int i=0;i<vecesPrestada.length;i++) {
+			if (nombrePelicula_categoria[i][0]!=null) {
+				if (vecesPrestada[i]>mayorVecesPrestada) {
+					mayorVecesPrestada=vecesPrestada[i];
+				}
+			}
+		}
+		for (int j=0;j<vecesPrestada.length;j++) {
+			if (nombrePelicula_categoria[j][0]!=null) {
+				if (mayorVecesPrestada==vecesPrestada[j]) {
+					System.out.print("Id: "+id_Año[j][0]);
+					System.out.print(espacio);
+					System.out.print("Nombre: "+nombrePelicula_categoria[j][0]);
+					System.out.print(espacio);
+					System.out.print("No. Veces Prestada: "+vecesPrestada[j]+"\n");
+				}
+			}
+		}
+		mayorVecesPrestada=0;
 	}
 
 	public void peliculaMenosPrestada(){
+		String espacio="----------";
+		System.out.print("Pelicula menos Prestada");
 
+		for (int i=0;i<vecesPrestada.length;i++) {
+			if (nombrePelicula_categoria[i][0]!=null) {
+				if (vecesPrestada[i]<menorVecesPrestada) {
+					menorVecesPrestada=vecesPrestada[i];
+				}
+			}
+		}
+		for (int j=0;j<vecesPrestada.length;j++) {
+			if (nombrePelicula_categoria[j][0]!=null) {
+				if (menorVecesPrestada==vecesPrestada[j]) {
+					System.out.print("Id: "+id_Año[j][0]);
+					System.out.print(espacio);
+					System.out.print("Nombre: "+nombrePelicula_categoria[j][0]);
+					System.out.print(espacio);
+					System.out.print("No. veces Prestada: "+vecesPrestada[j]+"\n");
+				}
+			}
+		}
+		menorVecesPrestada=10000;
 	}
 }
